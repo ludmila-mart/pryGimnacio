@@ -2,6 +2,7 @@
 using System;
 using System.Windows.Forms;
 
+
 namespace pryGimnacio
 {
     public partial class frmGimnacio : Form
@@ -321,6 +322,15 @@ namespace pryGimnacio
 
             EstadoInicial();
         }
+        public frmGimnacio()
+        {
+            InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
@@ -328,3 +338,5 @@ namespace pryGimnacio
         }
     }
 }
+
+
