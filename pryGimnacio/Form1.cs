@@ -1,4 +1,3 @@
-
 using System;
 using System.Windows.Forms;
 
@@ -31,6 +30,11 @@ namespace pryGimnacio
             public decimal Total;
             public decimal ValorCuota;
         }
+
+        // ARRAY de socios (nivel de clase para que no se reinicie en cada clic)
+        private const int MAX_SOCIOS = 50;
+        private SOCIO[] socios = new SOCIO[MAX_SOCIOS];
+        private int cantidadSocios = 0;
 
         // CORREGIDO: el constructor también se llama frmGimnacio
         public frmGimnacio()
@@ -117,6 +121,22 @@ namespace pryGimnacio
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
             EstadoInicial();
+        }
+
+        // MÉTODO que recorre el array de socios
+        private void MostrarSocios()
+        {
+            string lista = "--- SOCIOS INSCRIPTOS ---\n";
+            decimal recaudacion = 0;
+
+            for (int i = 0; i < cantidadSocios; i++)
+            {
+                lista += $"{i + 1}. {socios[i].Nombre} - {socios[i].Plan} - {socios[i].Total:C}\n";
+                recaudacion += socios[i].Total;
+            }
+
+            lista += $"\nCantidad: {cantidadSocios}\nRecaudación total: {recaudacion:C}";
+            MessageBox.Show(lista, "Listado de socios", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         // ETAPA 5.a: solo letras y espacios, en mayúsculas
@@ -309,6 +329,16 @@ namespace pryGimnacio
             unSocio.Total = montoFinal;
             unSocio.ValorCuota = valorCuotaCalculado;
 
+            // GUARDADO EN EL ARRAY
+            if (cantidadSocios >= MAX_SOCIOS)
+            {
+                MessageBox.Show("No hay más lugar para inscribir socios.", "Aviso",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            socios[cantidadSocios] = unSocio;
+            cantidadSocios++;
+
             string mensaje = "--- RESUMEN DE INSCRIPCIÓN ---\n" +
                              $"Socio: {unSocio.Nombre} ({unSocio.Categoria})\n" +
                              $"Plan: {unSocio.Plan} - Turno: {unSocio.Horario}\n" +
@@ -320,16 +350,8 @@ namespace pryGimnacio
 
             MessageBox.Show(mensaje, "Gimnasio Siglo - Resultado", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            EstadoInicial();
-        }
-        public frmGimnacio()
-        {
-            InitializeComponent();
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
+            // MUESTRA EL LISTADO DEL ARRAY
+            MostrarSocios();
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
@@ -338,5 +360,3 @@ namespace pryGimnacio
         }
     }
 }
-
-
